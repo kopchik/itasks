@@ -10,13 +10,9 @@ CAT -> COT - > COG -> DOG
 
 One character can change at one time and every resulting word has be a valid word from dictionary
 """
-import sys
-sys.setrecursionlimit(30)
+## time: ~40mins
 
 words = "cat cot cog dot dog".split()
-
-class NoMatch(Exception):
-  pass
 
 def dist(word1, word2):
   if len(word1) != len(word2):
