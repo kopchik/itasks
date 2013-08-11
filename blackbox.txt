@@ -1,0 +1,14 @@
+You are trying to to daemonize an unknown, black-box binary executable. The binary executable returns no output to STDOUT or STDERR. Assume that the mystery binary return code is non-zero. What troubleshooting steps might you take to learn more about what the binary is supposed to do, and why it is failing?
+
+
+
+1. Strace
+1. LD_PRELOAD to replace certain libraries and API calls
+1. System logs
+1. Exit code can be a sign
+1. (unlikely to help) go on with GDB
+1. Enivornment variables
+1. 32bit vs 64bit
+1. Library and kernel versions
+1. A specific device is required
+1. Hardcoded paths and/or executable name
