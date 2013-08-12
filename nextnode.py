@@ -3,52 +3,40 @@
 Given a BST, maximum and minimum value, find the sum of nodes with values between the above range
 """
 
-def brk(l):
-  assert(l), "cannot brake empty list"
-  l    = sorted(l)
-  mid  = len(l)//2
-  less = l[:mid]
-  more = l[mid:]
-  if less:
-    pivot = less.pop()
-  else:
-    pivot = more.pop()
-  return less, pivot, more
+from ds import BPNode
 
 
-class Node:
-  value = None
-  left = None
-  right = None
-  parent = None
-  @classmethod
-  def from_list(cls, l, parent=None):
-    if not l:
-      return None
-    root = Node()
-    root.parent = parent
-    left, value, right = brk(l)
-    root.value = value
-    root.left = Node.from_list(left, parent=root)
-    root.right = Node.from_list(right, parent=root)
-    return root
-
-  def __str__(self):
-    return "({} {} {})".format(self.value, self.left, self.right)
+def findtop(n):
+  """ find root of tree """
+  if not n.parent:
+    return n
+  return findtop(n.parent)
 
 
-def findnext(root, r):
-  if not root: return 0
+def find(n, v):
+  if n is None:
+    return None
+  if n.value == v:
+    return n
+  return find(n.left, v) or find(n.right, v)
 
-  if root.value in r:
-    return root.value + traverse(root.left, r) + traverse(root.right, r)
-  elif root.value < r.start:
-    return traverse(root.right, r)
-  else:
-    return traverse(root.left, r)
+
+def findup(n, v, prev=None):
+  if n.value == v:
+    return n
+    return find(n.left,v)
+    if r: return r
+
+  return (n.left != prev  and find(n.left, v))  \
+      or (n.right != prev and find(n.right, v)) \
+      or findup(n.parent, v, prev=n)
+
 
 if __name__ == '__main__':
   l = [1,2,3,4,5,6]
-  root = Node.from_list(l)
+  root = BPNode.from_list(l)
   print(root)
-  print(traverse(root, range(3,5)))
+  node = root.left.right
+  top = findtop(node)
+  print(find(top, 3))
+  print(findup(node, 3))
