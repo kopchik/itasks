@@ -9,25 +9,27 @@ def rhytm2(n=3, k=8):
   print("!"+"."*rem)
 
 
-def rhytm(n, k):
-  bins1 = [[1] for _ in range(n)]
-  bins2 = [[0] for _ in range(k)]
+def rhytm(pn, an):
+  ps = [[1] for _ in range(pn)]  # pulses
+  ts = [[0] for _ in range(an-pn)]  # timings
+  print(ps,ts)
 
   for x in range(3000):
     i = 0
-    while bins2 and i<len(bins1):
-      b2 = bins2.pop(0)
-      bins1[i] += b2
+    while ts and i<len(ps):
+      t = ts.pop(0)
+      ps[i] += t
       i += 1
-    if len(bins2) in [0,1]:
+    print("       ",ps, ts)
+    if len(ts) == 1:
       break
-    if not bins2:
-      bins2 = bins1[i:]
-      del bins1[i:]
-  print(bins1, bins2)
+    if not ts:
+      ts = ps[i:]
+      del ps[i:]
+      print("shuffle", ps, ts)
   r = []
-  for elem in bins1:
-    r += elem
+  for e in ps:
+    r += e
   print("".join(map(str, r)))
 
 
