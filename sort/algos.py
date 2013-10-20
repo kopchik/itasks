@@ -24,39 +24,62 @@ class enum:
       raise StopIteration
     return i, e
 
-def max(l):
+def min(l):
   global _counter
   r = l[0]
-  for pos,e in enumerate(l):
+  for pos, e in enumerate(l):
     _counter += 1
-    if e > r:
+    if e < r:
       r = e
   return r, pos
 
 def mysort1(l):
-  for i,e in enum(l, skip=1, stop=-1):
-    m, pos = max(l[i:])
-    old = l[i+pos]
+  for i,e in enum(l, stop=-1):
+    print(i,l)
+    m, off = min(l[i:])
+    old = l[i]
     l[i] = m
-    l[i+pos] = old
+    l[i+off] = old
   return l
 
 
-def isort(l):
+def isort1(l):
   for i,e in enum(l, 1):
-    print("sorting", e, "in", l)
     i -= 1
     while (i >= 0) and (l[i] > e):
-      print("swaping %s and %s (i=%s)" % (l[i+1], l[i], i))
       l[i+1] = l[i]
-      print("result:", l, i)
       i -= 1
     l[i+1] = e
-    print(l)
   return l
 
+
+def isort2(l):
+  for i,e in enum(l, 1):
+    while (i > 0) and (l[i-1] > e):
+      l[i] = l[i-1]
+      i -= 1
+    l[i] = e
+  return l
+
+def msort(l):
+  """ merge sort"""
+  size = len(l)
+  if size == 1: return l
+  left = msort(l[:size//2])
+  right = msort(l[size//2:])
+  r = []
+  while left and right:
+    if left[0] < right[0]:
+      r.append(left.pop(0))
+    else:
+      r.append(right.pop(0))
+  r += left + right
+  return r
+
+
 if __name__ == '__main__':
-  l=[6,5,4]
-  #l=list(reversed(l))
+  l=[5,6,4,3,2,1]
+  l=list(reversed(l))
   #print(mysort1(l))
-  print(isort(l))
+  #print(isort1(l))
+  print(msort(l))
