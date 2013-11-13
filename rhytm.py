@@ -1,37 +1,48 @@
 #!/usr/bin/env python3
+from sys import stderr
 
-def rhytm2(n=3, k=8):
-  avg = k//n
-  rem = k%n
-  for i in range(n):
-    print("!",end='')
-    print("."*avg, end='')
-  print("!"+"."*rem)
+def debug(*args, **kwargs):
+  if __debug__:
+    print(*args, file=stderr, **kwargs)
 
 
-def rhytm(pn, an):
+def goodtone(l):
+  fst = l[0]
+  for e in l[1:-1]:
+    if e != fst:
+      return False
+  return True
+
+
+def rhythm(pn, an):
   ps = [[1] for _ in range(pn)]  # pulses
   ts = [[0] for _ in range(an-pn)]  # timings
-  print(ps,ts)
+  debug("ps:", ps)
+  debug("ts:", ts)
 
-  for x in range(3000):
+  while True:
     i = 0
     while ts and i<len(ps):
       t = ts.pop(0)
       ps[i] += t
       i += 1
-    print("       ",ps, ts)
-    if len(ts) == 1:
-      break
+    debug("       ",ps, ts)
+    if len(ts) == 1 or \
+       (ts == [] and goodtone(ps)):
+        debug("good")
+        break
+
     if not ts:
       ts = ps[i:]
       del ps[i:]
-      print("shuffle", ps, ts)
-  r = []
-  for e in ps:
-    r += e
+      debug("shuffle", ps, ts)
+
+  # print result
+  r = sum(ps+ts, [])
   print("".join(map(str, r)))
 
 
 if __name__ == '__main__':
-  rhytm(3,8)
+  rhythm(5,13)
+  rhythm(3,8)
+
