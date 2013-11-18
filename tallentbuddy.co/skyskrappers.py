@@ -33,7 +33,5 @@ def skyscrapers(hs):
 if __name__ == '__main__':
   #heights = [9, 8, 7, 8, 9, 5, 6]
   heights = [1,9,7,6,6,7,8,3,3,3,5,1]
-  #from inpt import heights
-  #print(len(heights), min(heights), max(heights))
-  #exit()
+  from inpt import heights
   skyscrapers(heights)
