@@ -21,9 +21,10 @@ directions = [up, down, left, right]
 
 def paco(data, base):
   N, M, X, K, XCa,YCa, XCo,YCo = data
-  dst = (XCo-1, YCo-1)
   thr = int(X*K/2)
-  themap = [base[i*M:(i+1)*M] for i in range(N)]
+  src = PTR(XCa-1, YCa-1)
+  dst = PTR(XCo-1, YCo-1)
+  lightmap = [base[i*M:(i+1)*M] for i in range(N)]
   wavemap = [[None]*M for i in range(N)]
 
   def dump(map):
@@ -42,15 +43,12 @@ def paco(data, base):
   def trace(path):
     return sum(themap[x][y] for x,y in path)
 
-  startpos = PTR(XCa-1, YCa-1)
-  endpos = PTR(XCo-1, YCo-1)
-
-  queue = [(startpos, 0)]
+  queue = [(src, 0)]
   while queue:
     pos, cnt = queue.pop(0)
     if not validpos(pos):
       continue
-    if themap[pos.x][pos.y] >= K:
+    if lightmap[pos.x][pos.y] >= K:
       continue
     if wavemap[pos.x][pos.y] is not None:
       continue
@@ -58,30 +56,33 @@ def paco(data, base):
     for d in directions:
       queue.append((pos+d, cnt+1))
 
-  dump(themap)
+  dump(lightmap)
   dump(wavemap)
-  print(get(wavemap, endpos))
+  # print(get(wavemap, dst))
 
-  cnt = get(wavemap, pos)
-  acc = get(themap, pos)
-  queue = [(endpos, cnt, acc)]
+  cnt = get(wavemap, dst)
+  acc = get(lightmap, dst)
+  path = tuple()
+  queue = [(dst, cnt, acc, path)]
   while queue:
-    pos, cnt, acc = queue.pop(0)
+    pos, cnt, acc, path = queue.pop(0)
     if not validpos(pos):
       continue
-    if pos == endpos:
-      print(cnt, acc)
     if get(wavemap, pos) != cnt:
       continue
-    acc += get(themap, pos)
+    acc += get(lightmap, pos)
+    path = path + (pos,)
+    if pos == src:
+      acc2 = sum(get(lightmap, p) for p in path)
+      print(cnt, acc, acc2, path)
     for d in directions:
-      queue.append((pos+d, cnt-1, acc))
+      queue.append((pos+d, cnt-1, acc, path))
 
 
 if __name__ == '__main__':
   data = [4,4,3,7,1,1,4,4]
   base = [1,1,4,4,0,4,4,4,7,3,2,3,14,9,8,3]
-  from pacodata import data, base
+  # from pacodata import data, base
   #data = [2,2, 10, 10, 1,1, 2,2]
   #base = [0,0,0,0]
   paco(data, base)
