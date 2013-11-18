@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-import sys
-sys.setrecursionlimit(10000)
+from __future__ import print_function
 
 class PTR:
   def __init__(self, x, y):
@@ -41,7 +40,10 @@ def paco(data, base):
     return pos.x in range(N) and pos.y in range(M)
 
   def trace(path):
-    return sum(themap[x][y] for x,y in path)
+    return sum(get(lightmap, p) for p in path)
+
+  def check(path):
+    return sum(get(lightmap, p) for p in path[-X:]) < thr
 
   queue = [(src, 0)]
   while queue:
@@ -56,14 +58,15 @@ def paco(data, base):
     for d in directions:
       queue.append((pos+d, cnt+1))
 
-  dump(lightmap)
-  dump(wavemap)
+  # dump(lightmap)
+  # dump(wavemap)
   # print(get(wavemap, dst))
 
   cnt = get(wavemap, dst)
   acc = get(lightmap, dst)
   path = tuple()
-  queue = [(dst, cnt, acc, path)]
+  queue = [(dst, cnt, 0, path)]
+  candidates = []
   while queue:
     pos, cnt, acc, path = queue.pop(0)
     if not validpos(pos):
@@ -72,17 +75,23 @@ def paco(data, base):
       continue
     acc += get(lightmap, pos)
     path = path + (pos,)
+    if not check(path):
+      continue
     if pos == src:
       acc2 = sum(get(lightmap, p) for p in path)
       print(cnt, acc, acc2, path)
+      candidates.append(path)
+      continue
     for d in directions:
       queue.append((pos+d, cnt-1, acc, path))
-
+  candidates.sort(key=lambda x: trace(x))
+  bestpath = candidates[0]
+      print(len(bestpath)-1, trace(bestpath))
 
 if __name__ == '__main__':
   data = [4,4,3,7,1,1,4,4]
   base = [1,1,4,4,0,4,4,4,7,3,2,3,14,9,8,3]
-  # from pacodata import data, base
+  from pacodata import data, base
   #data = [2,2, 10, 10, 1,1, 2,2]
   #base = [0,0,0,0]
   paco(data, base)
