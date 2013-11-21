@@ -1,3 +1,12 @@
+Easy part -- bash
+=========
+
+Imagine that you have two text files.
+How would you concatenate them?
+----
+How would you implement column output:
+that is the context of two files side-by-side.
+
 SQL
 ===
 
