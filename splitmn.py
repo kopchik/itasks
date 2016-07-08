@@ -10,11 +10,12 @@ def split(m,n,k):
     return (m*n)//(max(m,n)//(k+1))
   else:
     k2 = k - (min(m,n) - 1)
-    return max(m,n) // k2
+    return max(m,n) // (k2+1)
 
 def test_split():
   assert split(4,1,1) == 2
   assert split(4,2,1) == 4
-  assert split(4,2,3) == 2
-  assert split(5,2,3) == 2
+  assert split(4,2,3) == 1
+  assert split(5,2,3) == 1
+  assert split(10,10,11) == 3
   

@@ -54,4 +54,4 @@ def cut2(len):
 if __name__ == '__main__':
   n = 100
   assert cut(n) == cut2(n)
-
+  print(cut(20))
