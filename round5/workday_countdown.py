@@ -60,9 +60,11 @@ def _countdown(numbers, target, operators=operators):
   -------
   Raw expression along with the result.
   """
-  best_expr = ([], [])
-  best_value = 0
-  best_error = target
+
+  best_value = numbers[0]
+  best_expr = ([numbers[0]], [])
+  best_error = abs(best_value - target)
+
   for i in range(1, len(numbers)+1):
     for nums in permutations(numbers, i):
       for ops in combinations_with_replacement(operators, len(nums)-1):
@@ -76,8 +78,8 @@ def _countdown(numbers, target, operators=operators):
           if r == target:
             return (nums, ops), r  # shortcut if we found solution
           else:
-            best_err = err
-            best_expr = nums, ops
+            best_expr  = nums, ops
+            best_error = err
             best_value = r
   return best_expr, best_value
 
